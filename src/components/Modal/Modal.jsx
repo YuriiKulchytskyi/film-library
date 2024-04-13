@@ -18,6 +18,29 @@ import icons from "../../images/icons.svg";
 import { useEffect } from "react";
 
 export const Modal = ({ onClose, film }) => {
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    const handleClickOutside = (event) => {
+      if (event.target.classList.contains("backdrop")) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleEsc);
+    window.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [onClose]);
+
   return (
     <Backdrop className="backdrop">
       <ModalWindow>
@@ -47,7 +70,7 @@ export const Modal = ({ onClose, film }) => {
               <DescItem>{film.director}</DescItem>
               <DescItem>{film.actors.join(", ")}</DescItem>
             </ModalDescriptionList>
-            <SvgList>
+            {/* <SvgList>
               <li>
                 <Svg>
                   <use href={`${icons}#icon-watch-later`}></use>
@@ -63,7 +86,7 @@ export const Modal = ({ onClose, film }) => {
                   <use href={`${icons}#icon-heart`}></use>
                 </Svg>
               </li>
-            </SvgList>
+            </SvgList> */}
             <Description>
               <DescTitle>Description</DescTitle>
               {film.description}

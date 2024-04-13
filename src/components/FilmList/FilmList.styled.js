@@ -9,4 +9,12 @@ export const ListOfFilms = styled.ul`
     gap: 20px;
     position: absolute;
     top: 30px;
+    padding: 0;
+    justify-content: center;
 `
+// export const ListOfFilms = styled.ul`
+//     list-style: none;
+//     display: grid;
+//     grid-template-columns: ;
+// `
+

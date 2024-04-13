@@ -1,15 +1,16 @@
-// import { Film } from "./components/Film/Film";
-import { FilmList } from "./components/FilmList/FilmList";
-import { Filters } from "./components/Filters/Filters";
-import { Modal } from "./components/Modal/Modal";
+import { Route, Routes } from "react-router-dom";
 import { ListPage } from "./pages/ListPage";
-// import database from './database.json'
+import { Favorites } from "./pages/Favorites";
+import { SharedLayout } from "./components/SharedLayout";
 
 function App() {
   return (
     <>
-      <ListPage />
-      {/* <Filters /> */}
+      <SharedLayout />
+      <Routes>
+        <Route path='/' element={<ListPage />} />
+        <Route path="/favorites" element={<Favorites/>} />
+      </Routes>
     </>
   );
 }

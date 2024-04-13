@@ -4,14 +4,15 @@ import database from '../../database.json'
 
 export const FilmList = () => {
     return (
-        <>
-            <ListOfFilms>
-                {database.map(film => (
-                    <Film key={film.id} film={film} />
-                ))}
-            </ListOfFilms>
-        </>
-
-    )
+      <>
+        <ListOfFilms>
+          {database.map((film) => (
+            <li key={film.id}>
+              <Film film={film} />
+            </li>
+          ))}
+        </ListOfFilms>
+      </>
+    );
 
 }

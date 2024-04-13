@@ -4,22 +4,74 @@ import {
   IconsWrapper,
   Image,
   ImageWrapper,
+  SvgButton,
   TitleLine,
 } from "./Film.styled";
 import { Modal } from "../Modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DescItem, Svg } from "../Modal/Modal.styled";
 import icons from "../../images/icons.svg";
+import { useDispatch } from "react-redux";
+import {
+  addToFavorite,
+  addToWatchLater,
+  removeFromFavorites,
+  removeFromWatchLater,
+} from "../../redux/filsms/filmsSlice";
 
 export const Film = ({ film, onClose }) => {
   const { image, title, rating, release_date } = film;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isToWatchLater, setIsToWatchLater] = useState(false);
+
+  const iconAdd = isFavorite ? "add-to-list-added" : "add-to-list";
+  const iconWatchLater = isToWatchLater ? "watch-later-added" : "watch-later";
+
+    useEffect(() => {
+      const favoriteFromStorage = localStorage.getItem(`favorite_${film.id}`);
+      if (favoriteFromStorage !== null) {
+        setIsFavorite(true);
+      }
+
+      const watchLaterFromStorage = localStorage.getItem(`watch_later_${film.id}`);
+      if (watchLaterFromStorage !== null) {
+        setIsToWatchLater(true)
+      }
+    }, [film.id]);
+
+  const dispatch = useDispatch();
+
   const showModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
   const hideModal = () => {
-    setIsModalOpen(false)
+    setIsModalOpen(false);
+  };
+
+  const handleSelectFavorite = () => {
+    setIsFavorite(!isFavorite);
+    if (!isFavorite) {
+      dispatch(addToFavorite(film));
+        localStorage.setItem(`favorite_${film.id}`, JSON.stringify(film));
+    } else {
+      dispatch(removeFromFavorites(film.id));
+      localStorage.removeItem(`favorite_${film.id}`);
+    }
+  };
+
+  const handleSelectWatchLater = () => {
+    setIsToWatchLater(!isToWatchLater);
+    if (!isToWatchLater) {
+      dispatch(addToWatchLater(film));
+      localStorage.setItem(`watch_later_${film.id}`, JSON.stringify(film))
+    }
+    else {
+      dispatch(removeFromWatchLater(film.id));
+      localStorage.removeItem(`watch_later_${film.id}`)
+    }
   }
 
   return (
@@ -41,20 +93,26 @@ export const Film = ({ film, onClose }) => {
       </FilmDescriptionList>
       <IconsWrapper>
         <li>
-          <Svg>
-            <use href={`${icons}#icon-watch-later`}></use>
-          </Svg>
+          <SvgButton onClick={handleSelectWatchLater}>
+            <Svg>
+              <use href={`${icons}#icon-${iconWatchLater}`}></use>
+            </Svg>
+          </SvgButton>
         </li>
         <li>
-          <Svg>
-            <use href={`${icons}#icon-add-to-list`}></use>
-          </Svg>
+          <SvgButton onClick={handleSelectFavorite}>
+            <Svg>
+              <use href={`${icons}#icon-${iconAdd}`}></use>
+            </Svg>
+          </SvgButton>
         </li>
-        <li>
-          <Svg>
-            <use href={`${icons}#icon-heart`}></use>
-          </Svg>
-        </li>
+        {/* <li>
+          <SvgButton>
+            <Svg>
+              <use href={`${icons}#icon-${iconHeart}`}></use>
+            </Svg>
+          </SvgButton>
+        </li> */}
       </IconsWrapper>
       {isModalOpen && <Modal onClose={hideModal} film={film} />}
     </FilmContainer>

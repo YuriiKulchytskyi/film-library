@@ -17,7 +17,7 @@ export const Backdrop = styled.div `
          background-color: rgba(0, 0, 0, 0.5);
          display: flex;
          justify-content: center;
-         z-index: 1000;
+         z-index: 10;
          align-items: center;
 `
 
@@ -25,8 +25,10 @@ export const ModalWindow = styled.div `
         background-color: '#fff';
         padding: 20px;
         border-radius: 8px;
-        width: 900px;
+        width: 70%;
+        max-width: 900px;
         height: 320px;
+        margin: 0 auto;
         overflow: auto;
         position: relative;
         z-index: 1001;
@@ -35,7 +37,7 @@ export const ModalWindow = styled.div `
         overflow-y: hidden;
 
         @media screen and (max-width: 1439px){
-            width: 80%;
+            /* width: 80%; */
             padding: 20px;
         }
         
@@ -94,6 +96,8 @@ export const ModalDescriptionList = styled.ul `
 
 export const FilmTitle = styled.h2 `
     margin: 0;
+    width: 280px;
+
 `
 
 export const Genre = styled.p `
@@ -126,6 +130,7 @@ export const Description = styled.div `
 
 export const DescTitle = styled.h3 `
     margin: 0;
+    width: 280px;
 `
 
 export const SvgList = styled.ul `
@@ -140,7 +145,7 @@ export const SvgList = styled.ul `
     top: 0;
     padding: 0;
 
-    @media screen and (max-width: 1440px) {
+    @media screen and (min-width: 768px) {
           right: 70px;
           top: 27px;
     }

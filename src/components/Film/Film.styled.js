@@ -44,5 +44,10 @@ export const IconsWrapper = styled.ul`
 export const TitleLine = styled.p`
     height: 20px;
     margin: 0;
-    overflow-y: scroll;
+    overflow-y: hidden;
+`
+
+export const SvgButton = styled.button`
+    background-color: transparent;
+    border: none;
 `
