@@ -17,10 +17,14 @@ import {
   addToWatchLater,
   removeFromFavorites,
   removeFromWatchLater,
-} from "../../redux/filsms/filmsSlice";
+  setAllFavoritesFromLocalStorage,
+} from "../../redux/films/filmsSlice";
+import { useSelector } from "react-redux";
+import { getFavorites } from "../../redux/films/filmsSelectors";
 
 export const Film = ({ film, onClose }) => {
-  const { image, title, rating, release_date } = film;
+  const { id, image, title, rating, release_date } = film;
+  const favorites = useSelector(getFavorites);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -29,17 +33,18 @@ export const Film = ({ film, onClose }) => {
   const iconAdd = isFavorite ? "add-to-list-added" : "add-to-list";
   const iconWatchLater = isToWatchLater ? "watch-later-added" : "watch-later";
 
-    useEffect(() => {
-      const favoriteFromStorage = localStorage.getItem(`favorite_${film.id}`);
-      if (favoriteFromStorage !== null) {
-        setIsFavorite(true);
-      }
+  useEffect(() => {
+    if (favorites.some(({ id: favoriteFilmId }) => favoriteFilmId === id)) {
+      setIsFavorite(true);
+    }
 
-      const watchLaterFromStorage = localStorage.getItem(`watch_later_${film.id}`);
-      if (watchLaterFromStorage !== null) {
-        setIsToWatchLater(true)
-      }
-    }, [film.id]);
+    const watchLaterFromStorage = localStorage.getItem(
+      `watch_later_${film.id}`
+    );
+    if (watchLaterFromStorage !== null) {
+      setIsToWatchLater(true);
+    }
+  }, [film.id]);
 
   const dispatch = useDispatch();
 
@@ -55,7 +60,7 @@ export const Film = ({ film, onClose }) => {
     setIsFavorite(!isFavorite);
     if (!isFavorite) {
       dispatch(addToFavorite(film));
-        localStorage.setItem(`favorite_${film.id}`, JSON.stringify(film));
+      localStorage.setItem(`favorites`, JSON.stringify([film]));
     } else {
       dispatch(removeFromFavorites(film.id));
       localStorage.removeItem(`favorite_${film.id}`);
@@ -66,13 +71,12 @@ export const Film = ({ film, onClose }) => {
     setIsToWatchLater(!isToWatchLater);
     if (!isToWatchLater) {
       dispatch(addToWatchLater(film));
-      localStorage.setItem(`watch_later_${film.id}`, JSON.stringify(film))
-    }
-    else {
+      localStorage.setItem(`watch_later_${film.id}`, JSON.stringify(film));
+    } else {
       dispatch(removeFromWatchLater(film.id));
-      localStorage.removeItem(`watch_later_${film.id}`)
+      localStorage.removeItem(`watch_later_${film.id}`);
     }
-  }
+  };
 
   return (
     <FilmContainer>
