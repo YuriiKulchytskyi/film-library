@@ -54,3 +54,30 @@ export const deleteExistingMovie = createAsyncThunk(
         }
     }
 )
+
+export const fetchMovieDetails = createAsyncThunk(
+    'movies/fetchMovieDetails',
+    async (id, thunkAPI) => {
+        try {
+            const response = await axios.get(`/${id}`);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+);
+
+export const updateMovieDetailsAsync = createAsyncThunk(
+    'movies/updateMovieDetails',
+    async ({
+        id,
+        updatedMovieDetails
+    }, thunkAPI) => {
+        try {
+            const response = await axios.patch(`/${id}`, updatedMovieDetails);
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.message);
+        }
+    }
+);

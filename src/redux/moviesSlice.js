@@ -3,9 +3,11 @@ import {
 } from "@reduxjs/toolkit";
 import {
     deleteExistingMovie,
+    fetchMovieDetails,
     fetchMovies,
     getMovieById,
-    postNewMovie
+    postNewMovie,
+    updateMovieDetailsAsync
 } from "./moviesOperations";
 
 const initialState = {
@@ -13,6 +15,7 @@ const initialState = {
     favorites: [],
     error: null,
     isLoading: false,
+    selectedMovie: null,
 }
 
 const moviesSlice = createSlice({
@@ -68,7 +71,28 @@ const moviesSlice = createSlice({
             .addCase(deleteExistingMovie.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.movies = state.movies.filter(item => item.id !== action.payload)
-        })
+            })
+            .addCase(fetchMovieDetails.pending, state => {
+                state.isLoading = true;
+            })
+            .addCase(fetchMovieDetails.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchMovieDetails.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedMovie = action.payload
+        }).addCase(updateMovieDetailsAsync.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateMovieDetailsAsync.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedMovie = action.payload;
+            })
+            .addCase(updateMovieDetailsAsync.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
     }
 })
 

@@ -1,26 +1,38 @@
-import { NavLink } from "react-router-dom";
+import {
+    NavLink
+} from "react-router-dom";
 import styled from "styled-components";
 
-export const Header = styled.div`
-    width: 1440px;
+export const Header = styled.div `
     height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
-    position: absolute;
-    top: 0;
+    background-color: bisque;
+    
+    @media screen and (max-width: 768px) {
+        height: 60px;
+    }
+`;
 
-`
-
-export const NavWrapper = styled.nav`
-    width: 80%;
+export const NavWrapper = styled.nav `
+    width: 66%;
     height: 80%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`
+    align-items: center;
+    
+    @media screen and (max-width: 768px) {
+        width: 80%;
+    }
+    
+    @media screen and (max-width: 360px) {
+        width: 90%;
+    }
+`;
 
 export const Navigation = styled(NavLink)`
-    border: 1px solid black;
-`
+    font-weight: 700;
+    color: #242424;
+`;

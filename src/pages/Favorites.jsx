@@ -1,8 +1,8 @@
 import { ListOfMovies } from "../components/MovieList/MovieList.styled";
 import { Movie } from "../components/MovieList/Movie";
 import { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
-// import { deleteExistingMovie, fetchMovies } from "../redux/moviesOperations";
+import { Warning } from "./Favorites.styled";
+
 
 export const Favorites = () => {
   const [favorites, setFavorites] = useState(() => {
@@ -46,13 +46,13 @@ export const Favorites = () => {
 
   return (
     <>
-      <ListOfMovies>
+      {favorites.length !== 0 ? <ListOfMovies>
         {favorites.map((movie) => (
           <li key={movie.id}>
             <Movie movie={movie} onClick={() => toggleFavorite(movie)}/>
           </li>
         ))}
-      </ListOfMovies>
+      </ListOfMovies> : <Warning>List is empty...</Warning>}
     </>
   );
 };

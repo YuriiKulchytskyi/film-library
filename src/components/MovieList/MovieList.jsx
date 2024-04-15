@@ -4,13 +4,12 @@ import { getAllMovies } from "../../redux/moviesSlice";
 import { useEffect } from "react";
 import { deleteExistingMovie, fetchMovies } from "../../redux/moviesOperations";
 import { Movie } from "./Movie";
-import { ListOfMovies } from "./MovieList.styled";
+import { ListOfMovies, MovieListWrapper } from "./MovieList.styled";
 import Filter from "../Filter/Filter";
 import { selectFilteredMovies } from "../../redux/selectors";
 
 export const MovieList = () => {
   const dispatch = useDispatch();
-  const movies = useSelector(getAllMovies);
   const filteredMovies = useSelector(selectFilteredMovies)
 
   useEffect(() => {
@@ -43,7 +42,7 @@ export const MovieList = () => {
 
 
   return (
-    <>
+    <MovieListWrapper>
       <Filter />
       <ListOfMovies>
         {filteredMovies.map((movie) => (
@@ -56,6 +55,6 @@ export const MovieList = () => {
           </li>
         ))}
       </ListOfMovies>
-    </>
+    </MovieListWrapper>
   );
 };

@@ -1,11 +1,10 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import { postNewMovie } from "../../../redux/moviesOperations";
 import { nanoid } from "nanoid";
-import { FormContainer, LabelContainer } from "./AddForm.styled";
+import { FormContainer, Input, LabelContainer } from "./AddForm.styled";
 import { useNavigate } from "react-router-dom";
-
-
+import * as yup from "yup";
 
 const initialValues = {
   title: "",
@@ -15,70 +14,132 @@ const initialValues = {
   genre: "",
   actors: "",
   director: "",
-    image: "",
+  image: "",
   id: nanoid(),
 };
 
+const movieSchema = yup.object().shape({
+  id: yup.string().required("ID is required"),
+  title: yup.string().required("Title is required"),
+  description: yup.string().required("Description is required"),
+  rating: yup
+    .number()
+    .required("Rating is required")
+    .min(0, "Rating must be greater than or equal to 0")
+    .max(10, "Rating must be less than or equal to 10"),
+  release_date: yup
+    .string()
+    .required("Release date is required")
+    .matches(
+      /^\d{4}-\d{2}-\d{2}$/,
+      "Release date must be in YYYY-MM-DD format"
+    ),
+  genre: yup
+    .array()
+    .of(yup.string().required("Genre item is required"))
+    .required("At least one genre is required"),
+  actors: yup
+    .array()
+    .of(yup.string().required("Actor name is required"))
+    .required("At least one actor is required"),
+  director: yup.string().required("Director name is required"),
+  image: yup
+    .string()
+    .url("Image URL must be a valid URL")
+    .required("Image URL is required"),
+});
 
 const MovieForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
   const onSubmit = (values, { resetForm }) => {
-    dispatch(postNewMovie(values))
+    dispatch(postNewMovie(values));
     console.log(values);
-    navigate('/')
+    navigate("/");
     resetForm();
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {(formik) => (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={movieSchema}
+      onSubmit={onSubmit}
+    >
+      {() => (
         <Form>
           <FormContainer>
             <LabelContainer>
-              <label htmlFor="title">Title</label>
-              <Field type="text" id="title" name="title" />
+              <label htmlFor="title"></label>
+              <Input type="text" id="title" name="title" placeholder="Title" />
               <ErrorMessage name="title" component="div" />
             </LabelContainer>
             <LabelContainer>
-              <label htmlFor="description">Description</label>
-              <Field type="text" id="description" name="description" />
+              <label htmlFor="description"></label>
+              <Input
+                type="text"
+                id="description"
+                name="description"
+                placeholder="Description"
+              />
               <ErrorMessage name="description" component="div" />
-            </LabelContainer>{" "}
+            </LabelContainer>
             <LabelContainer>
-              <label htmlFor="rating">Rating</label>
-              <Field type="text" id="rating" name="rating" />
+              <label htmlFor="rating"></label>
+              <Input
+                type="text"
+                id="rating"
+                name="rating"
+                placeholder="Rating"
+              />
               <ErrorMessage name="rating" component="div" />
-            </LabelContainer>{" "}
+            </LabelContainer>
             <LabelContainer>
-              <label htmlFor="release_date">Release date</label>
-              <Field type="text" id="release_date" name="release_date" />
+              <label htmlFor="release_date"></label>
+              <Input
+                type="text"
+                id="release_date"
+                name="release_date"
+                placeholder="Release Date"
+              />
               <ErrorMessage name="release_date" component="div" />
-            </LabelContainer>{" "}
+            </LabelContainer>
             <LabelContainer>
-              <label htmlFor="genre">Genre</label>
-              <Field type="text" id="genre" name="genre" />
+              <label htmlFor="genre"></label>
+              <Input type="text" id="genre" name="genre" placeholder="Genre" />
               <ErrorMessage name="genre" component="div" />
-            </LabelContainer>{" "}
+            </LabelContainer>
             <LabelContainer>
-              <label htmlFor="actors">Actors</label>
-              <Field type="text" id="actors" name="actors" />
+              <label htmlFor="actors"></label>
+              <Input
+                type="text"
+                id="actors"
+                name="actors"
+                placeholder="Actors"
+              />
               <ErrorMessage name="actors" component="div" />
-            </LabelContainer>{" "}
+            </LabelContainer>
             <LabelContainer>
-              <label htmlFor="director">Director</label>
-              <Field type="text" id="director" name="director" />
+              <label htmlFor="director"></label>
+              <Input
+                type="text"
+                id="director"
+                name="director"
+                placeholder="Director"
+              />
               <ErrorMessage name="director" component="div" />
-            </LabelContainer>{" "}
+            </LabelContainer>
             <LabelContainer>
-              <label htmlFor="image">Image</label>
-              <Field type="text" id="image" name="image" />
+              <label htmlFor="image"></label>
+              <Input
+                type="text"
+                id="image"
+                name="image"
+                placeholder="Image(url)"
+              />
               <ErrorMessage name="image" component="div" />
             </LabelContainer>
-            <button type="submit" onClick={onSubmit}>
-              Add new Movie
-            </button>
+            <button type="submit">Add new Movie</button>
           </FormContainer>
         </Form>
       )}
