@@ -1,28 +1,24 @@
 import { Route, Routes } from "react-router-dom";
-import { ListPage } from "./pages/ListPage";
+// import './App.css'
+import { MovieList } from "./components/MovieList/MovieList";
 import { Favorites } from "./pages/Favorites";
-import { SharedLayout } from "./components/SharedLayout";
-import { useEffect } from "react";
-import { setAllFavoritesFromLocalStorage } from "./redux/films/filmsSlice";
-import { useDispatch } from "react-redux";
+import { SharedLayout } from "./components/Shared/SharedLayout";
+import { Suspense } from "react";
+import { AppContainer } from "./App.styled";
+import MovieForm from "./components/Forms/AddForm/AddForm";
+
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const favoritesFromStorage = localStorage.getItem(`favorites`);
-    const parsedFavorites = JSON.parse(favoritesFromStorage) || [];
-    dispatch(setAllFavoritesFromLocalStorage(parsedFavorites));
-  }, []);
-
   return (
-    <>
+    <AppContainer>
       <SharedLayout />
+      <Suspense />
       <Routes>
-        <Route path="/" element={<ListPage />} />
+        <Route path="/" element={<MovieList />} />
         <Route path="/favorites" element={<Favorites />} />
+        <Route path="/add" element={<MovieForm />} />
       </Routes>
-    </>
+    </AppContainer>
   );
 }
 
